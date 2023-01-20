@@ -1,24 +1,18 @@
 //import
-const express = require("express");
+const express = require("express").Router();
+const { readFromFile, readAndAppend } = require('../helpers/fsUtils');
 
-const notes = require('../notes.json');
-
-//acquire route files
-const fileNameRoute = require("./fileNames");
-
-const app = express();
-
-app.get('/notes', (req, res) => {
-    res.json(notes)
+express.get('/notes', (req, res) => {
+    readFromFile('./db/fileName.json')
+        .then((data) => res.json(JSON.parse(data)));
 })
 
-app.post('/notes', (req, res) => {
-    console.log(req.body)
-    res.json(notes)
-})
+express.post('/notes', (req, res) => {
+    const newPost = req.body.title;
+    readAndAppend(newPost, './db/fileName.json',)
+        .then((data) => res.json(JSON.stringify(data)));
 
-//link routes to app
-app.use("/fileName", fileNameRoute);
+})
 
 //export
-module.exports = app;
+module.exports = express;
