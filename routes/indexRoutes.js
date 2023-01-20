@@ -8,11 +8,31 @@ express.get('/notes', (req, res) => {
 })
 
 express.post('/notes', (req, res) => {
-    const newPost = req.body.title;
-    readAndAppend(newPost, './db/fileName.json',)
-        .then((data) => res.json(JSON.stringify(data)));
+    const newPost = req.body;
+    if (req.body) {
+        newPost = {
+            express_id: uuid(),
+        };
 
-})
+        readAndAppend(newPost, './db/fileName.json');
+        res.json();
+    } else {
+        res.error('Error reading file');
+    }
+    newPost.push(newFileName);
+    fs.writeFile("./db/fileName.json", JSON.stringify(newPost), (err, data) => {
+        if (err) {
+            res.send("Error writing to file")
+        } else {
+            res.json(
+                {
+                    data: newPost,
+                    lastAdded: newFileName
+                }
+            )
+        }
+    })
+});
 
 //export
 module.exports = express;
