@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/osjarju/Note-Taker#readme",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "uuid": "^3.4.0"
   }
 }

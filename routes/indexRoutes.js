@@ -1,6 +1,7 @@
 //import
 const express = require("express").Router();
 const { readFromFile, readAndAppend } = require('../helpers/fsUtils');
+const uuidv1 = require('uuid/v1');
 
 express.get('/notes', (req, res) => {
     readFromFile('./db/fileName.json')
@@ -8,31 +9,36 @@ express.get('/notes', (req, res) => {
 })
 
 express.post('/notes', (req, res) => {
-    const newPost = req.body;
+    let newPost = req.body;
     if (req.body) {
         newPost = {
-            express_id: uuid(),
+            express_id: uuidv1(),
         };
+        return uuidv1;
 
         readAndAppend(newPost, './db/fileName.json');
         res.json();
     } else {
-        res.error('Error reading file');
+        res.send('Error reading file');
     }
-    newPost.push(newFileName);
-    fs.writeFile("./db/fileName.json", JSON.stringify(newPost), (err, data) => {
-        if (err) {
-            res.send("Error writing to file")
-        } else {
-            res.json(
-                {
-                    data: newPost,
-                    lastAdded: newFileName
-                }
-            )
-        }
-    })
-});
+
+})
+
+
+// newPost.push(newFileName);
+// fs.writeFile("./db/fileName.json", JSON.stringify(newPost), (err, data) => {
+//         if (err) {
+//             res.send("Error writing to file")
+//         } else {
+//             res.json(
+//                 {
+//                     data: newPost,
+//                     lastAdded: newFileName
+//                 }
+//             )
+//         }
+//     })
+// });
 
 //export
 module.exports = express;
